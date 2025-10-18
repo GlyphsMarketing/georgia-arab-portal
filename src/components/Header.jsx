@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { 
-  Moon, 
-  Sun, 
   Globe, 
   Menu, 
   X, 
@@ -18,8 +16,11 @@ import {
 import { useAuth } from '@/lib/useAuth'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import lightLogo from '../assets/light_bk_ga.png'
-import darkLogo from '../assets/dark_bk_ga.png'
+import { ThemeSwitcher } from '@/components/ui/theme-switcher'
+// import lightLogo from '../assets/light_bk_ga.png'
+// import darkLogo from '../assets/dark_bk_ga.png'
+import lightLogo from '../assets/light_bk_ga.ico'
+import darkLogo from '../assets/dark_bk_ga.ico'
 
 const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage, onLogin, onRegister }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -122,18 +123,11 @@ const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage, onLogin, o
             </Button>
 
             {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={toggleDarkMode}
+            <ThemeSwitcher 
+              darkMode={darkMode} 
+              toggleDarkMode={toggleDarkMode} 
               className="hidden sm:flex"
-            >
-              {darkMode ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </Button>
+            />
 
             {/* Add Business Button */}
             <Button className="hidden md:flex" size="sm">
@@ -250,23 +244,13 @@ const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage, onLogin, o
                       {language === 'en' ? 'العربية' : 'English'}
                     </Button>
                     
-                    <Button 
-                      onClick={toggleDarkMode} 
-                      variant="outline" 
+                    <ThemeSwitcher 
+                      darkMode={darkMode} 
+                      toggleDarkMode={toggleDarkMode}
+                      variant="outline"
+                      showText={true}
                       className="w-full justify-start"
-                    >
-                      {darkMode ? (
-                        <>
-                          <Sun className="h-4 w-4 mr-2" />
-                          Light Mode
-                        </>
-                      ) : (
-                        <>
-                          <Moon className="h-4 w-4 mr-2" />
-                          Dark Mode
-                        </>
-                      )}
-                    </Button>
+                    />
                     
                     <Button className="w-full justify-start">
                       <Building2 className="h-4 w-4 mr-2" />

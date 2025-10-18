@@ -150,9 +150,9 @@ const SearchFilter = ({
                 )}
               </Button>
             </SheetTrigger>
-            <SheetContent side={language === 'ar' ? 'left' : 'right'}>
+            <SheetContent side={language === 'ar' ? 'left' : 'right'} className="bg-background text-foreground">
               <SheetHeader>
-                <SheetTitle>{t.filters}</SheetTitle>
+                <SheetTitle className="text-foreground">{t.filters}</SheetTitle>
               </SheetHeader>
               <div className="mt-6">
                 {renderFilterContent()}

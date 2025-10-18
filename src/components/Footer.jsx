@@ -12,8 +12,10 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import lightLogo from '../assets/light_bk_ga.png'
-import darkLogo from '../assets/dark_bk_ga.png'
+// import lightLogo from '../assets/light_bk_ga.png'
+// import darkLogo from '../assets/dark_bk_ga.png'
+import lightLogo from '../assets/light_bk_ga.ico'
+import darkLogo from '../assets/dark_bk_ga.ico'
 
 const Footer = ({ language }) => {
   const translations = {
@@ -110,12 +112,12 @@ const Footer = ({ language }) => {
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src={lightLogo}
+                src={darkLogo}
                 alt="Georgia Arab Community"
                 className="h-12 w-auto dark:hidden"
               />
               <img
-                src={darkLogo}
+                src={lightLogo}
                 alt="Georgia Arab Community"
                 className="h-12 w-auto hidden dark:block"
               />

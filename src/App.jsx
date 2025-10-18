@@ -30,6 +30,7 @@ import ProfileSettings from './components/account/ProfileSettings'
 import SupportCenter from './components/account/SupportCenter'
 import AuthDialogs from './components/auth/AuthDialogs'
 import './App.css'
+import './theme-utils.css'
 
 function App() {
   const [darkMode, setDarkMode] = useState(false)
@@ -85,7 +86,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className={`min-h-screen bg-background text-foreground transition-colors duration-300 ${language === 'ar' ? 'font-arabic' : ''}`}>
+        <div className={`min-h-screen bg-background text-foreground theme-transition ${language === 'ar' ? 'font-arabic' : ''}`}>
           <Header 
             darkMode={darkMode} 
             toggleDarkMode={toggleDarkMode}

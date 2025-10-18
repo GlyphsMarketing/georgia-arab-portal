@@ -656,7 +656,7 @@ const Directory = ({ language = 'en' }) => {
       </section>
 
       {/* Main Categories Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial="initial"
@@ -665,11 +665,11 @@ const Directory = ({ language = 'en' }) => {
             variants={staggerContainer}
           >
             <motion.div variants={fadeInUp} className="text-center mb-16">
-              <Badge className="mb-4 bg-blue-100 text-blue-800">
+              <Badge className="mb-4 bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                 <Grid className="h-4 w-4 mr-2" />
                 {t.allCategories}
               </Badge>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-6">
                 Explore Business Categories
               </h2>
             </motion.div>
@@ -683,35 +683,45 @@ const Directory = ({ language = 'en' }) => {
                   className="group cursor-pointer"
                   onClick={() => handleCategoryClick(category.id)}
                 >
-                  <Card className={`h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-300 bg-gradient-to-br ${category.bgColor}`}>
+                  <Card 
+                    className={`h-full border-0 shadow-lg hover:shadow-2xl transition-all duration-300 ${
+                      category.bgColor.includes('from-blue') ? 'dark:from-blue-900/20 dark:to-blue-800/20' : 
+                      category.bgColor.includes('from-green') ? 'dark:from-green-900/20 dark:to-green-800/20' :
+                      category.bgColor.includes('from-purple') ? 'dark:from-purple-900/20 dark:to-purple-800/20' :
+                      category.bgColor.includes('from-red') ? 'dark:from-red-900/20 dark:to-red-800/20' :
+                      category.bgColor.includes('from-yellow') ? 'dark:from-yellow-900/20 dark:to-yellow-800/20' :
+                      category.bgColor.includes('from-pink') ? 'dark:from-pink-900/20 dark:to-pink-800/20' :
+                      'dark:from-gray-800 dark:to-gray-900'
+                    } bg-gradient-to-br ${category.bgColor} dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-900/30`}
+                  >
                     <CardHeader className="text-center pb-4">
                       <div className={`w-20 h-20 bg-gradient-to-br ${category.color} rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
                         <category.icon className="h-10 w-10 text-white" />
                       </div>
-                      <CardTitle className="text-xl font-bold group-hover:text-blue-600 transition-colors">
+                      <CardTitle className="text-xl font-bold group-hover:text-blue-600 dark:text-gray-100 dark:group-hover:text-blue-400 transition-colors">
                         {category.name}
                       </CardTitle>
-                      <CardDescription className="text-gray-600">
+                      <CardDescription className="text-gray-600 dark:text-gray-300">
                         {category.businessCount} {t.businesses}
                       </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="relative z-10">
                       <div className="space-y-2 mb-6">
                         {category.subcategories.slice(0, 3).map((sub) => (
                           <div key={sub.id} className="flex items-center justify-between text-sm">
-                            <span className="text-gray-600">{sub.name}</span>
-                            <Badge variant="secondary" className="text-xs">
+                            <span className="text-gray-700 dark:text-gray-300">{sub.name}</span>
+                            <Badge variant="secondary" className="text-xs dark:bg-gray-700/70 dark:text-gray-200">
                               {sub.businessCount}
                             </Badge>
                           </div>
                         ))}
                         {category.subcategories.length > 3 && (
-                          <div className="text-sm text-gray-500 text-center pt-2">
+                          <div className="text-sm text-gray-500 dark:text-gray-400 text-center pt-2">
                             +{category.subcategories.length - 3} more categories
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center justify-center text-blue-600 group-hover:text-blue-700 font-medium">
+                      <div className="flex items-center justify-center text-blue-700 group-hover:text-blue-800 dark:text-blue-400 dark:group-hover:text-blue-300 font-medium">
                         <span className="mr-2">{t.exploreCategory}</span>
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                       </div>
@@ -725,7 +735,7 @@ const Directory = ({ language = 'en' }) => {
       </section>
 
       {/* Featured Businesses Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.div
             initial="initial"
@@ -735,29 +745,29 @@ const Directory = ({ language = 'en' }) => {
           >
             <motion.div variants={fadeInUp} className="flex justify-between items-center mb-12">
               <div>
-                <Badge className="mb-4 bg-yellow-100 text-yellow-800">
+                <Badge className="mb-4 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
                   <Star className="h-4 w-4 mr-2" />
                   Featured Businesses
                 </Badge>
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
                   Top-Rated Community Businesses
                 </h2>
               </div>
-              <Button variant="outline" className="hidden md:flex">
+              <Button variant="outline" className="hidden md:flex dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800">
                 {t.viewAll}
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </motion.div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredBusinesses.map((business, index) => (
+              {featuredBusinesses.map((business) => (
                 <motion.div
                   key={business.id}
                   variants={fadeInUp}
                   whileHover={{ y: -5 }}
                   className="group"
                 >
-                  <Card className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300">
+                  <Card className="overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 dark:bg-gray-800 dark:border-gray-700 dark:shadow-gray-900/30">
                     <div className="relative">
                       <img
                         src={business.image}
@@ -766,19 +776,19 @@ const Directory = ({ language = 'en' }) => {
                       />
                       <div className="absolute top-4 left-4 flex gap-2">
                         {business.verified && (
-                          <Badge className="bg-green-500 text-white">
+                          <Badge className="bg-green-500 text-white dark:bg-green-600 dark:text-white">
                             <CheckCircle className="h-3 w-3 mr-1" />
                             {t.verified}
                           </Badge>
                         )}
                         {business.topRated && (
-                          <Badge className="bg-yellow-500 text-white">
+                          <Badge className="bg-yellow-500 text-white dark:bg-yellow-600 dark:text-white">
                             <Star className="h-3 w-3 mr-1" />
                             {t.topRated}
                           </Badge>
                         )}
                         {business.newBusiness && (
-                          <Badge className="bg-blue-500 text-white">
+                          <Badge className="bg-blue-500 text-white dark:bg-blue-600 dark:text-white">
                             <Sparkles className="h-3 w-3 mr-1" />
                             {t.newBusiness}
                           </Badge>
@@ -787,17 +797,17 @@ const Directory = ({ language = 'en' }) => {
                     </div>
                     <CardContent className="p-6">
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                           {business.name}
                         </h3>
                         <div className="flex items-center">
                           <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                          <span className="ml-1 text-sm font-medium">{business.rating}</span>
+                          <span className="ml-1 text-sm font-medium dark:text-gray-200">{business.rating}</span>
                         </div>
                       </div>
-                      <p className="text-blue-600 text-sm font-medium mb-2">{business.category}</p>
-                      <p className="text-gray-600 mb-3">{business.description}</p>
-                      <div className="flex items-center text-sm text-gray-500 mb-4">
+                      <p className="text-blue-600 dark:text-blue-400 text-sm font-medium mb-2">{business.category}</p>
+                      <p className="text-gray-600 dark:text-gray-300 mb-3">{business.description}</p>
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                         <MapPin className="h-4 w-4 mr-1" />
                         {business.location}
                         <span className="mx-2">•</span>
@@ -805,10 +815,10 @@ const Directory = ({ language = 'en' }) => {
                         {business.phone}
                       </div>
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1 group-hover:bg-blue-600 transition-colors">
+                        <Button size="sm" className="flex-1 group-hover:bg-blue-600 transition-colors dark:bg-blue-700 dark:text-white dark:hover:bg-blue-600">
                           {t.viewBusiness}
                         </Button>
-                        <Button size="sm" variant="outline" className="flex-1">
+                        <Button size="sm" variant="outline" className="flex-1 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700">
                           {t.callNow}
                         </Button>
                       </div>
