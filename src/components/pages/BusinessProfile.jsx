@@ -125,10 +125,10 @@ const BusinessProfile = ({ language = 'en' }) => {
       closesAt: 'Closes at',
       
       // Common
-      reviews: 'reviews',
-      review: 'review',
-      photos: 'photos',
-      photo: 'photo',
+      reviewsCount: 'reviews',
+      reviewSingular: 'review',
+      photosCount: 'photos',
+      photoSingular: 'photo',
       viewAll: 'View All',
       showMore: 'Show More',
       showLess: 'Show Less'
@@ -193,10 +193,10 @@ const BusinessProfile = ({ language = 'en' }) => {
       closesAt: 'يغلق في',
       
       // Common
-      reviews: 'مراجعات',
-      review: 'مراجعة',
-      photos: 'صور',
-      photo: 'صورة',
+      reviewsCount: 'مراجعات',
+      reviewSingular: 'مراجعة',
+      photosCount: 'صور',
+      photoSingular: 'صورة',
       viewAll: 'عرض الكل',
       showMore: 'عرض المزيد',
       showLess: 'عرض أقل'
@@ -444,7 +444,7 @@ const BusinessProfile = ({ language = 'en' }) => {
                     </div>
                     <span className="ml-2 text-lg font-semibold">{business.rating}</span>
                     <span className="ml-2 text-gray-600">
-                      ({business.reviews} {business.reviews === 1 ? t.review : t.reviews})
+                      ({business.reviews} {business.reviews === 1 ? t.reviewSingular : t.reviewsCount})
                     </span>
                   </div>
                   <span className="text-gray-400">•</span>
@@ -532,7 +532,7 @@ const BusinessProfile = ({ language = 'en' }) => {
               <div className="absolute bottom-4 right-4">
                 <Badge className="bg-black/70 text-white">
                   <ImageIcon className="h-3 w-3 mr-1" />
-                  {business.photos} {business.photos === 1 ? t.photo : t.photos}
+                  {business.photos} {business.photos === 1 ? t.photoSingular : t.photosCount}
                 </Badge>
               </div>
             </div>

@@ -104,7 +104,7 @@ const MarketplaceProduct = ({ language = 'en' }) => {
       yourName: 'Your Name',
       yourEmail: 'Your Email',
       yourPhone: 'Your Phone',
-      sendMessage: 'Send Message',
+      submitMessage: 'Send Message',
       
       // Image gallery
       imageGallery: 'Image Gallery',
@@ -176,7 +176,7 @@ const MarketplaceProduct = ({ language = 'en' }) => {
       yourName: 'اسمك',
       yourEmail: 'بريدك الإلكتروني',
       yourPhone: 'رقم هاتفك',
-      sendMessage: 'إرسال رسالة',
+      submitMessage: 'إرسال رسالة',
       
       // Image gallery
       imageGallery: 'معرض الصور',
@@ -738,7 +738,7 @@ Serious buyers only. Price is slightly negotiable for quick sale.`,
                   className="w-full p-3 border rounded-lg resize-none h-24 focus:outline-none focus:ring-2 focus:ring-primary/50"
                 />
                 <button className="w-full mt-3 bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors">
-                  {t.sendMessage}
+                  {t.submitMessage}
                 </button>
               </div>
             </div>

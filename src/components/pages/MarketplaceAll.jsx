@@ -115,7 +115,7 @@ const MarketplaceAll = ({ language = 'en' }) => {
       
       // Status
       verified: 'Verified Seller',
-      featured: 'Featured',
+      featuredStatus: 'Featured',
       urgent: 'Urgent Sale',
       negotiable: 'Negotiable',
       
@@ -198,7 +198,7 @@ const MarketplaceAll = ({ language = 'en' }) => {
       
       // Status
       verified: 'بائع موثق',
-      featured: 'مميز',
+      featuredStatus: 'مميز',
       urgent: 'بيع عاجل',
       negotiable: 'قابل للتفاوض',
       
@@ -608,7 +608,7 @@ const MarketplaceAll = ({ language = 'en' }) => {
                         {product.featured && (
                           <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                             <Star className="h-3 w-3" />
-                            {t.featured}
+                            {t.featuredStatus}
                           </span>
                         )}
                         {product.urgent && (
@@ -715,7 +715,7 @@ const MarketplaceAll = ({ language = 'en' }) => {
                       <div className="absolute top-3 right-3 flex flex-col gap-2">
                         {product.featured && (
                           <span className="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                            {t.featured}
+                            {t.featuredStatus}
                           </span>
                         )}
                         {product.urgent && (
