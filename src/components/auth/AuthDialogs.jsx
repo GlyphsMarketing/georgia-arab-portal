@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { 
   Mail, 
@@ -15,6 +15,8 @@ import {
   MapPin,
   Globe
 } from 'lucide-react'
+import { useAuth } from '@/lib/useAuth'
+import authService from '@/lib/authService'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,13 +27,30 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' }) => {
+const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en', onAuth }) => {
   const [activeTab, setActiveTab] = useState(initialTab)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState(1)
   const [accountType, setAccountType] = useState('individual')
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    businessName: '',
+    businessCategory: '',
+    businessAddress: '',
+    businessWebsite: '',
+    agreeToTerms: false
+  })
+  const [formError, setFormError] = useState('')
+  
+  // Get auth context
+  const { login, register, resetPassword, authError, clearError } = useAuth()
 
   const translations = {
     en: {
@@ -205,20 +224,88 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
     { value: 'other', label: t.other }
   ]
 
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
+    
+    // Clear any form errors when user starts typing
+    if (formError) {
+      setFormError('');
+    }
+    if (authError) {
+      clearError();
+    }
+  };
+
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setFormError('');
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    setIsLoading(false)
-    
-    if (activeTab === 'register' && step < 3) {
-      setStep(step + 1)
-    } else {
-      // Success - close dialog
-      onClose()
+    try {
+      setIsLoading(true);
+      
+      if (activeTab === 'login') {
+        // Handle login
+        const userData = await login(formData.email, formData.password);
+        onAuth(userData);
+        onClose();
+      } 
+      else if (activeTab === 'register') {
+        if (step < 3) {
+          // Validation for registration step 1
+          if (step === 1) {
+            if (formData.password !== formData.confirmPassword) {
+              setFormError(t.passwordMismatch);
+              return;
+            }
+            setStep(step + 1);
+          }
+          // Validation for registration step 2
+          else if (step === 2) {
+            if (!formData.agreeToTerms) {
+              setFormError(t.termsRequired);
+              return;
+            }
+            
+            // Register the user
+            const userData = {
+              email: formData.email,
+              password: formData.password,
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              phone: formData.phone,
+              accountType: accountType,
+              businessDetails: accountType === 'business' ? {
+                name: formData.businessName,
+                category: formData.businessCategory,
+                address: formData.businessAddress,
+                website: formData.businessWebsite
+              } : null
+            };
+            
+            await register(userData);
+            setStep(3);
+          }
+        } else {
+          // Final step complete - close dialog and notify parent
+          onAuth(await authService.getCurrentUser());
+          onClose();
+        }
+      }
+      else if (activeTab === 'reset') {
+        // Handle password reset
+        await resetPassword(formData.email);
+        // Show success message or close
+        onClose();
+      }
+    } catch (error) {
+      setFormError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -230,6 +317,20 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       onSubmit={handleSubmit}
       className="space-y-6"
     >
+      {formError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{formError}</AlertDescription>
+        </Alert>
+      )}
+      
+      {authError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{authError}</AlertDescription>
+        </Alert>
+      )}
+      
       <div className="space-y-4">
         <div>
           <Label htmlFor="email">{t.email}</Label>
@@ -237,7 +338,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
             <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="email"
+              name="email"
               type="email"
+              value={formData.email}
+              onChange={handleInputChange}
               placeholder="ahmed@example.com"
               className="pl-10"
               required
@@ -251,7 +355,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
             <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="password"
+              name="password"
               type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={handleInputChange}
               className="pl-10 pr-10"
               required
             />
@@ -316,6 +423,20 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
+      {formError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{formError}</AlertDescription>
+        </Alert>
+      )}
+      
+      {authError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{authError}</AlertDescription>
+        </Alert>
+      )}
+      
       <div>
         <Label>{t.accountType}</Label>
         <div className="grid grid-cols-2 gap-4 mt-2">
@@ -351,6 +472,9 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
             <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="firstName"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleInputChange}
               placeholder="Ahmed"
               className="pl-10"
               required
@@ -361,6 +485,9 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
           <Label htmlFor="lastName">{t.lastName}</Label>
           <Input
             id="lastName"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
             placeholder="Al-Hassan"
             required
           />
@@ -373,7 +500,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             id="email"
+            name="email"
             type="email"
+            value={formData.email}
+            onChange={handleInputChange}
             placeholder="ahmed@example.com"
             className="pl-10"
             required
@@ -387,7 +517,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
           <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             id="phone"
+            name="phone"
             type="tel"
+            value={formData.phone}
+            onChange={handleInputChange}
             placeholder="+1 (555) 123-4567"
             className="pl-10"
             required
@@ -402,7 +535,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
             <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="password"
+              name="password"
               type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={handleInputChange}
               className="pl-10 pr-10"
               required
             />
@@ -421,7 +557,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
             <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
               id="confirmPassword"
+              name="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
               className="pl-10 pr-10"
               required
             />
@@ -445,6 +584,13 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       transition={{ duration: 0.3 }}
       className="space-y-6"
     >
+      {formError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{formError}</AlertDescription>
+        </Alert>
+      )}
+      
       {accountType === 'business' && (
         <>
           <div>
@@ -453,6 +599,9 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
               <Building2 className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 id="businessName"
+                name="businessName"
+                value={formData.businessName}
+                onChange={handleInputChange}
                 placeholder="Al-Salam Restaurant"
                 className="pl-10"
                 required
@@ -462,7 +611,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
 
           <div>
             <Label htmlFor="businessCategory">{t.businessCategory}</Label>
-            <Select>
+            <Select 
+              value={formData.businessCategory} 
+              onValueChange={(value) => setFormData({...formData, businessCategory: value})}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
@@ -482,6 +634,9 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
               <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 id="businessAddress"
+                name="businessAddress"
+                value={formData.businessAddress}
+                onChange={handleInputChange}
                 placeholder="123 Main Street, Atlanta, GA"
                 className="pl-10"
                 required
@@ -495,7 +650,10 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
               <Globe className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 id="businessWebsite"
+                name="businessWebsite"
                 type="url"
+                value={formData.businessWebsite}
+                onChange={handleInputChange}
                 placeholder="https://www.example.com"
                 className="pl-10"
               />
@@ -505,8 +663,14 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       )}
 
       <div className="flex items-start space-x-2">
-        <Checkbox id="terms" required />
-        <Label htmlFor="terms" className="text-sm leading-relaxed">
+        <Checkbox 
+          id="agreeToTerms" 
+          name="agreeToTerms" 
+          checked={formData.agreeToTerms}
+          onCheckedChange={(checked) => setFormData({...formData, agreeToTerms: checked})}
+          required 
+        />
+        <Label htmlFor="agreeToTerms" className="text-sm leading-relaxed">
           {t.agreeTerms}
         </Label>
       </div>
@@ -525,9 +689,12 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       </div>
       <div>
         <h3 className="text-lg font-semibold mb-2">{t.registerSuccess}</h3>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mb-4">
           Welcome to the Georgia Arab Community Portal! Your account has been created successfully.
         </p>
+        <Button onClick={onClose}>
+          Get Started
+        </Button>
       </div>
     </motion.div>
   )
@@ -624,13 +791,30 @@ const AuthDialogs = ({ isOpen, onClose, initialTab = 'login', language = 'en' })
       onSubmit={handleSubmit}
       className="space-y-6"
     >
+      {formError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{formError}</AlertDescription>
+        </Alert>
+      )}
+      
+      {authError && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{authError}</AlertDescription>
+        </Alert>
+      )}
+      
       <div>
         <Label htmlFor="resetEmail">{t.email}</Label>
         <div className="relative">
           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             id="resetEmail"
+            name="email"
             type="email"
+            value={formData.email}
+            onChange={handleInputChange}
             placeholder="ahmed@example.com"
             className="pl-10"
             required

@@ -18,6 +18,7 @@ import {
   Plus,
   X
 } from 'lucide-react'
+import { useAuth } from '@/lib/useAuth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -219,22 +220,25 @@ const ProfileSettings = ({ language = 'en' }) => {
 
   const t = translations[language]
 
-  // Mock user data
+  // Get user data from auth context
+  const { user } = useAuth();
+
+  // User data with fallbacks
   const userData = {
-    firstName: 'Ahmed',
-    lastName: 'Al-Hassan',
-    email: 'ahmed@example.com',
-    phone: '+1 (555) 123-4567',
-    bio: 'Passionate entrepreneur and community advocate in Atlanta.',
-    location: 'Atlanta, Georgia',
-    website: 'https://www.ahmed-hassan.com',
-    avatar: '/api/placeholder/100/100',
-    businessName: 'Al-Salam Restaurant',
-    businessCategory: 'Restaurant',
-    businessDescription: 'Authentic Middle Eastern cuisine in the heart of Atlanta.',
-    businessAddress: '123 Peachtree Street, Atlanta, GA 30309',
-    businessPhone: '+1 (555) 987-6543',
-    businessWebsite: 'https://www.al-salam.com'
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    bio: user?.bio || 'Tell us about yourself.',
+    location: user?.location || 'Atlanta, Georgia',
+    website: user?.website || '',
+    avatar: user?.profileImage || '/api/placeholder/100/100',
+    businessName: user?.businessDetails?.name || '',
+    businessCategory: user?.businessDetails?.category || 'restaurant',
+    businessDescription: user?.businessDetails?.description || '',
+    businessAddress: user?.businessDetails?.address || '',
+    businessPhone: user?.businessDetails?.phone || '',
+    businessWebsite: user?.businessDetails?.website || ''
   }
 
   const ProfileTab = () => (

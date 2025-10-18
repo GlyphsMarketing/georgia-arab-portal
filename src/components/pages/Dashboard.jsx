@@ -21,6 +21,7 @@ import {
   HelpCircle,
   Clock
 } from 'lucide-react'
+import { useAuth } from '@/lib/useAuth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -135,14 +136,33 @@ const Dashboard = ({ language }) => {
 
   const t = translations[language]
 
-  // Mock user data
+  // Get user data from auth context
+  const { user } = useAuth()
+  
+  // Calculate profile completion
+  const calculateProfileCompletion = () => {
+    if (!user) return 0;
+    
+    let completedFields = 0;
+    let totalFields = 4; // email, firstName, lastName, phone
+    
+    if (user.email) completedFields++;
+    if (user.firstName) completedFields++;
+    if (user.lastName) completedFields++;
+    if (user.phone) completedFields++;
+    
+    return Math.round((completedFields / totalFields) * 100);
+  }
+  
+  const profileCompletion = calculateProfileCompletion();
+  
   const userData = {
-    name: 'Ahmed Al-Hassan',
-    email: 'ahmed@example.com',
-    avatar: '/api/placeholder/100/100',
-    profileCompletion: 75,
-    memberSince: '2023',
-    verified: true
+    name: user ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : 'Guest',
+    email: user?.email || 'No email',
+    avatar: user?.profileImage || '/api/placeholder/100/100',
+    profileCompletion: profileCompletion,
+    memberSince: user?.createdAt ? new Date(user.createdAt).getFullYear() : new Date().getFullYear(),
+    verified: !!user?.email
   }
 
   const statistics = [

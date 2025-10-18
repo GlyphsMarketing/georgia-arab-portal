@@ -9,16 +9,23 @@ import {
   X, 
   Building2, 
   User,
-  LogIn
+  LogIn,
+  LogOut,
+  Settings,
+  Bell,
+  ChevronDown
 } from 'lucide-react'
+import { useAuth } from '@/lib/useAuth'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import lightLogo from '../assets/light_bk_ga.png'
 import darkLogo from '../assets/dark_bk_ga.png'
 
-const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage }) => {
+const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage, onLogin, onRegister }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
   const location = useLocation()
+  const { isAuthenticated, user, logout } = useAuth()
 
   const translations = {
     en: {
@@ -134,11 +141,69 @@ const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage }) => {
               {t.addBusiness}
             </Button>
 
-            {/* Login Button */}
-            <Button variant="outline" size="sm" className="hidden md:flex">
-              <LogIn className="h-4 w-4 mr-2" />
-              {t.login}
-            </Button>
+            {/* Authentication Buttons */}
+            {isAuthenticated ? (
+              <div className="hidden md:flex relative">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className="flex items-center gap-2"
+                >
+                  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                    {user?.firstName?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                  </div>
+                  <span>{user?.firstName || user?.email}</span>
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+                {userMenuOpen && (
+                  <div className="absolute top-full right-0 mt-1 w-64 bg-card rounded-xl border shadow-lg overflow-hidden z-50">
+                    <div className="p-4 border-b">
+                      <p className="font-medium">{user?.firstName} {user?.lastName}</p>
+                      <p className="text-sm text-muted-foreground">{user?.email}</p>
+                    </div>
+                    <div className="p-2">
+                      <Link 
+                        to="/dashboard" 
+                        className="flex items-center gap-2 p-2 hover:bg-accent rounded-lg transition-colors w-full text-left"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <User className="h-4 w-4" />
+                        Dashboard
+                      </Link>
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center gap-2 p-2 hover:bg-accent rounded-lg transition-colors w-full text-left"
+                        onClick={() => setUserMenuOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        Profile Settings
+                      </Link>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setUserMenuOpen(false);
+                        }}
+                        className="flex items-center gap-2 p-2 hover:bg-accent rounded-lg transition-colors w-full text-left"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="hidden md:flex items-center gap-2">
+                <Button variant="outline" size="sm" onClick={onLogin}>
+                  <LogIn className="h-4 w-4 mr-2" />
+                  {t.login}
+                </Button>
+                <Button size="sm" onClick={onRegister}>
+                  {t.register}
+                </Button>
+              </div>
+            )}
 
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -208,10 +273,47 @@ const Header = ({ darkMode, toggleDarkMode, language, toggleLanguage }) => {
                       {t.addBusiness}
                     </Button>
                     
-                    <Button variant="outline" className="w-full justify-start">
-                      <LogIn className="h-4 w-4 mr-2" />
-                      {t.login}
-                    </Button>
+                    {isAuthenticated ? (
+                      <>
+                        <Link to="/dashboard">
+                          <Button variant="outline" className="w-full justify-start">
+                            <User className="h-4 w-4 mr-2" />
+                            Dashboard
+                          </Button>
+                        </Link>
+                        <Button 
+                          variant="outline" 
+                          className="w-full justify-start"
+                          onClick={logout}
+                        >
+                          <LogOut className="h-4 w-4 mr-2" />
+                          Logout
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button 
+                          variant="outline" 
+                          className="w-full justify-start"
+                          onClick={() => {
+                            setIsOpen(false);
+                            onLogin();
+                          }}
+                        >
+                          <LogIn className="h-4 w-4 mr-2" />
+                          {t.login}
+                        </Button>
+                        <Button 
+                          className="w-full justify-start"
+                          onClick={() => {
+                            setIsOpen(false);
+                            onRegister();
+                          }}
+                        >
+                          {t.register}
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               </SheetContent>

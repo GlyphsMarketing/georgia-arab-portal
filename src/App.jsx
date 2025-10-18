@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { AuthProvider } from './lib/AuthProvider'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import HomePage from './components/pages/HomePage'
@@ -33,15 +35,11 @@ function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [language, setLanguage] = useState('en')
   const [authDialog, setAuthDialog] = useState({ isOpen: false, tab: 'login' })
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
     // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem('theme')
     const savedLanguage = localStorage.getItem('language')
-    const savedAuth = localStorage.getItem('isAuthenticated') === 'true'
-    const savedUser = JSON.parse(localStorage.getItem('user') || 'null')
     
     if (savedTheme === 'dark') {
       setDarkMode(true)
@@ -52,9 +50,6 @@ function App() {
       setLanguage(savedLanguage)
       document.documentElement.dir = savedLanguage === 'ar' ? 'rtl' : 'ltr'
     }
-
-    setIsAuthenticated(savedAuth)
-    setUser(savedUser)
   }, [])
 
   const toggleDarkMode = () => {
@@ -83,45 +78,32 @@ function App() {
     setAuthDialog({ isOpen: false, tab: 'login' })
   }
 
-  const handleAuth = (userData) => {
-    setIsAuthenticated(true)
-    setUser(userData)
-    localStorage.setItem('isAuthenticated', 'true')
-    localStorage.setItem('user', JSON.stringify(userData))
+  const handleAuth = () => {
     closeAuthDialog()
-  }
-
-  const handleLogout = () => {
-    setIsAuthenticated(false)
-    setUser(null)
-    localStorage.removeItem('isAuthenticated')
-    localStorage.removeItem('user')
   }
 
   return (
     <Router>
-      <div className={`min-h-screen bg-background text-foreground transition-colors duration-300 ${language === 'ar' ? 'font-arabic' : ''}`}>
-        <Header 
-          darkMode={darkMode} 
-          toggleDarkMode={toggleDarkMode}
-          language={language}
-          toggleLanguage={toggleLanguage}
-          isAuthenticated={isAuthenticated}
-          user={user}
-          onLogin={() => openAuthDialog('login')}
-          onRegister={() => openAuthDialog('register')}
-          onLogout={handleLogout}
-        />
-        
-        <AnimatePresence mode="wait">
-          <motion.main
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Routes>
-              <Route path="/" element={<HomePage language={language} />} />
+      <AuthProvider>
+        <div className={`min-h-screen bg-background text-foreground transition-colors duration-300 ${language === 'ar' ? 'font-arabic' : ''}`}>
+          <Header 
+            darkMode={darkMode} 
+            toggleDarkMode={toggleDarkMode}
+            language={language}
+            toggleLanguage={toggleLanguage}
+            onLogin={() => openAuthDialog('login')}
+            onRegister={() => openAuthDialog('register')}
+          />
+          
+          <AnimatePresence mode="wait">
+            <motion.main
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Routes>
+                <Route path="/" element={<HomePage language={language} />} />
               <Route path="/directory" element={<Directory language={language} />} />
               <Route path="/directory/:category" element={<DirectorySubcategory language={language} />} />
               <Route path="/directory/:category/:subcategory" element={<DirectorySubcategory language={language} />} />
@@ -148,48 +130,18 @@ function App() {
               <Route 
                 path="/dashboard" 
                 element={
-                  isAuthenticated ? (
-                    <Dashboard language={language} user={user} />
-                  ) : (
-                    <div className="min-h-screen flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold mb-4">Access Restricted</h1>
-                        <p className="text-muted-foreground mb-6">
-                          Please log in to access your dashboard.
-                        </p>
-                        <button
-                          onClick={() => openAuthDialog('login')}
-                          className="bg-primary text-primary-foreground px-6 py-2 rounded-md hover:bg-primary/90 transition-colors"
-                        >
-                          Login
-                        </button>
-                      </div>
-                    </div>
-                  )
-                } 
+                  <ProtectedRoute>
+                    <Dashboard language={language} />
+                  </ProtectedRoute>
+                }
               />
               <Route 
                 path="/profile" 
                 element={
-                  isAuthenticated ? (
-                    <ProfileSettings language={language} user={user} />
-                  ) : (
-                    <div className="min-h-screen flex items-center justify-center">
-                      <div className="text-center">
-                        <h1 className="text-2xl font-bold mb-4">Access Restricted</h1>
-                        <p className="text-muted-foreground mb-6">
-                          Please log in to access your profile settings.
-                        </p>
-                        <button
-                          onClick={() => openAuthDialog('login')}
-                          className="bg-primary text-primary-foreground px-6 py-2 rounded-md hover:bg-primary/90 transition-colors"
-                        >
-                          Login
-                        </button>
-                      </div>
-                    </div>
-                  )
-                } 
+                  <ProtectedRoute>
+                    <ProfileSettings language={language} />
+                  </ProtectedRoute>
+                }
               />
             </Routes>
           </motion.main>
@@ -206,6 +158,7 @@ function App() {
           onAuth={handleAuth}
         />
       </div>
+      </AuthProvider>
     </Router>
   )
 }
