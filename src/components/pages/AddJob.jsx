@@ -29,7 +29,9 @@ const AddJob = ({ language = 'en' }) => {
     phoneNumber: '',
     email: '',
     companyName: '',
-    companyLogo: null
+    companyLogo: null,
+    requirements: '',
+    benefits: ''
   })
 
   const translations = {
@@ -74,6 +76,10 @@ const AddJob = ({ language = 'en' }) => {
       companyPlaceholder: 'e.g. TechCorp Solutions',
       companyLogo: 'Company Logo',
       uploadLogo: 'Upload Logo',
+      requirements: 'Job Requirements',
+      requirementsPlaceholder: 'List the key requirements and qualifications needed for this position...',
+      benefits: 'Job Benefits',
+      benefitsPlaceholder: 'List the benefits and perks offered with this position...',
       postJob: 'Post Job',
       cancel: 'Cancel',
       required: 'Required',
@@ -117,9 +123,13 @@ const AddJob = ({ language = 'en' }) => {
       email: 'عنوان البريد الإلكتروني',
       emailPlaceholder: 'your.email@example.com',
       companyName: 'اسم الشركة',
-      companyPlaceholder: 'مثال: TechCorp Solutions',
+      companyPlaceholder: 'مثال: حلول تك كورب',
       companyLogo: 'شعار الشركة',
-      uploadLogo: 'رفع الشعار',
+      uploadLogo: 'تحميل الشعار',
+      requirements: 'متطلبات الوظيفة',
+      requirementsPlaceholder: 'اذكر المتطلبات والمؤهلات الرئيسية المطلوبة لهذا المنصب...',
+      benefits: 'مزايا الوظيفة',
+      benefitsPlaceholder: 'اذكر المزايا والفوائد المقدمة مع هذا المنصب...',
       postJob: 'نشر الوظيفة',
       cancel: 'إلغاء',
       required: 'مطلوب',
@@ -399,6 +409,35 @@ const AddJob = ({ language = 'en' }) => {
                     rows={6}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     required
+                  />
+                </div>
+
+                {/* Requirements */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.requirements} <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={formData.requirements}
+                    onChange={(e) => handleInputChange('requirements', e.target.value)}
+                    placeholder={t.requirementsPlaceholder}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    required
+                  />
+                </div>
+
+                {/* Benefits */}
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {t.benefits} <span className="text-gray-500">({t.optional})</span>
+                  </label>
+                  <textarea
+                    value={formData.benefits}
+                    onChange={(e) => handleInputChange('benefits', e.target.value)}
+                    placeholder={t.benefitsPlaceholder}
+                    rows={4}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 

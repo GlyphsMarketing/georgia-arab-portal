@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -24,6 +25,7 @@ const Jobs = ({ language }) => {
       subtitle: 'Find your next career opportunity in the Arab community',
       searchPlaceholder: 'Search jobs, companies, skills...',
       postJob: 'Post a Job',
+      createJob: 'Create Job',
       jobType: 'Job Type',
       location: 'Location',
       experience: 'Experience Level',
@@ -194,9 +196,11 @@ const Jobs = ({ language }) => {
                 />
               </div>
             </div>
-            <Button className="lg:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              {t.postJob}
+            <Button asChild className="lg:w-auto">
+              <Link to="/jobs/add">
+                <Plus className="h-4 w-4 mr-2" />
+                {t.postJob}
+              </Link>
             </Button>
           </div>
 
