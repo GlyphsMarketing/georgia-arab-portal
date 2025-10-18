@@ -1,0 +1,112 @@
+I want you to build a responsive, luxury-style community portal for the Arab community in Georgia (USA). The website should be developed in Next.js (React) with smooth animations, transitions, and motion effects, fully SEO-optimized, and support multilingual functionality (English LTR and Arabic RTL). It must also include a functional dark/light mode switch.
+
+The platform should include both public pages and a user account portal for managing listings, businesses, real estate, marketplace products, jobs, and support tickets. The design should be modern, luxurious, and responsive on desktop, tablet, and mobile. Performance should be optimized with lazy-loading, schema markup, and SEO best practices.
+
+---
+
+## 📖 Website Structure
+
+### Public Pages
+
+* Homepage (Hero, About, Categories, Featured Businesses, App Download, States Directory, Footer)
+* Directory
+* About Us
+* Marketplace (Search, Filters, Pagination, Product Details, Add Product)
+* Real Estate (Search, Filters, Pagination, Real Estate Details, Add Real Estate)
+* Jobs (Search, Filters, Pagination, Job Details, Add Job)
+* Businesses (Search, Categories, Pagination, Business Details, Add Business)
+* Blogs
+* Contact Us
+* FAQs
+* Privacy Policy
+* Terms & Conditions
+
+### User Account Portal
+
+* Dashboard
+* Business Profile
+* Jobs (My Listings & Applications)
+* Marketplace (My Products)
+* Real Estate (My Listings)
+* Support Ticket System
+* Profile Settings
+* Change Password
+* Notifications
+* Addresses
+* Online Chat Help
+
+---
+
+## 🧭 Header Navigation
+
+* Logo
+* Homepage
+* Directory
+* Marketplace
+* Real Estate
+* Jobs
+* About
+* Blogs
+* Language Switch (EN/AR)
+* Dark/Light Mode Switch
+* CTA: Add Business
+* Login/Register
+
+---
+
+## 📌 Pages Breakdown
+
+### Jobs Page
+
+* Hero + Search
+* Filters (Job Seeking / Job Opportunity, Type, Experience Level, City, Salary)
+* Sorting + View Options (List/Grid)
+* Listings with Pagination
+* Job Details (share, favorite, apply button)
+* Add Job Form (different fields for Job Seeking vs. Job Opportunity)
+
+### Marketplace Page
+
+* Hero + Search
+* Filters (Category, Sub-Category, City, Condition, Price, Year)
+* Sorting + View Options (List/Grid)
+* Listings with Pagination
+* Product Details (share, favorite, contact button, tips)
+* Add Product Form
+
+### Real Estate Page
+
+* Hero + Search
+* Filters (Looking / Accommodation, Type, City, Price, Rooms, Bathrooms, Area, etc.)
+* Sorting
+* Listings with Pagination
+* Real Estate Details (share, favorite, apply button)
+* Add Real Estate Form
+
+### Business Directory Page
+
+* Hero + Search
+* Categories & Subcategories
+* Filters (City, Category, Subcategory)
+* Listings with Pagination
+* Business Details (share, favorite, contact button)
+* Add Business Form (logo, media, category, services, contact info, location, working hours, social links)
+
+---
+
+## 🎨 Design & Development Notes
+
+* Clean, modern, luxury-style design
+* Smooth animations & transitions for a premium feel
+* Responsive (desktop, tablet, mobile)
+* SEO-first with schema markup
+* Ads sections available on all pages
+* Online chat support integrated
+* Optimized for performance (lazy loading, best practices)
+* Creative freedom on About, Blogs, FAQs, and Contact Us sections
+* Use attached logo for branding (if available)
+
+
+📌 Old reference site: [https://arab-georgia.com](https://arab-georgia.com)
+
+⚡ Build this platform with Next.js, React, TailwindCSS (for design), Framer Motion (for animations), and SEO best practices. Ensure multilingual functionality, auth system dialogs (login, register, reset password), and a scalable user dashboard with business, jobs, marketplace, and real estate features.
