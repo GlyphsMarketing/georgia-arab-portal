@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -394,9 +395,11 @@ const RealEstate = ({ language }) => {
                 />
               </div>
             </div>
-            <Button className="lg:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              {t.addProperty}
+            <Button asChild className="lg:w-auto">
+              <Link to="/real-estate/add">
+                <Plus className="h-4 w-4 mr-2" />
+                {t.addProperty}
+              </Link>
             </Button>
           </div>
 

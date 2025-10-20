@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
   Calendar,
@@ -24,10 +25,36 @@ import Pagination from '../shared/Pagination'
 import AdSection from '../shared/AdSection'
 
 const Blogs = ({ language }) => {
-  const [searchValue, setSearchValue] = useState('')
-  const [activeCategory, setActiveCategory] = useState('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(9)
+  const [searchValue, setSearchValue] = useState('');
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const navigate = useNavigate();
+
+  const featuredBlog = {
+    id: 1,
+    title: "Understanding Arab Business Culture in Georgia",
+    excerpt: "Georgia's growing Arab business community brings unique perspectives and practices to the local economy. Understanding these cultural nuances is key to successful business relationships.",
+    image: "/blog/arab-business-culture.jpg",
+    author: "Mohammed Ahmed",
+    date: "2025-10-15",
+    readTime: "8",
+    views: "1.2k",
+    category: "Business"
+  };
+  const navigate = useNavigate()
+
+  const featuredBlog = {
+    id: 1,
+    title: 'Understanding Arab Business Culture in Georgia',
+    excerpt: 'Georgia's growing Arab business community brings unique perspectives and practices to the local economy. Understanding these cultural nuances is key to successful business relationships.',
+    image: '/blog/arab-business-culture.jpg',
+    author: 'Mohammed Ahmed',
+    date: '2025-10-15',
+    readTime: '8',
+    views: '1.2k',
+    category: 'Business'
+  }
 
   const translations = {
     en: {

@@ -15,6 +15,7 @@ import MarketplaceCategory from './components/pages/MarketplaceCategory'
 import MarketplaceAll from './components/pages/MarketplaceAll'
 import MarketplaceProduct from './components/pages/MarketplaceProduct'
 import RealEstate from './components/pages/RealEstate'
+import AddProperty from './components/pages/AddProperty'
 import Jobs from './components/pages/Jobs'
 import AddJob from './components/pages/AddJob'
 import JobDetails from './components/pages/JobDetails'
@@ -115,6 +116,7 @@ function App() {
               <Route path="/marketplace/category/:categoryId" element={<MarketplaceCategory language={language} />} />
               <Route path="/marketplace/product/:productId" element={<MarketplaceProduct language={language} />} />
               <Route path="/real-estate" element={<RealEstate language={language} />} />
+              <Route path="/real-estate/add" element={<AddProperty language={language} />} />
               <Route path="/jobs" element={<Jobs language={language} />} />
               <Route path="/jobs/add" element={<AddJob language={language} />} />
               <Route path="/jobs/:jobId" element={<JobDetails language={language} />} />
