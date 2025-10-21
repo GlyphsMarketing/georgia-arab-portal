@@ -285,74 +285,77 @@ const Jobs = ({ language }) => {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -2 }}
             >
-              <Card className="hover:shadow-lg transition-all duration-300">
+              <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer">
                 <CardContent className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <div>
-                          <h3 className="text-xl font-semibold text-foreground mb-1">
-                            {job.title}
-                          </h3>
-                          <div className="flex items-center text-muted-foreground mb-2">
-                            <Building2 className="h-4 w-4 mr-1" />
-                            <span className="font-medium">{job.company}</span>
+                  <Link to={`/jobs/${job.id}`} className="block">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h3 className="text-xl font-semibold text-foreground mb-1">
+                              {job.title}
+                            </h3>
+                            <div className="flex items-center text-muted-foreground mb-2">
+                              <Building2 className="h-4 w-4 mr-1" />
+                              <span className="font-medium">{job.company}</span>
+                            </div>
+
+                            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                              <div className="flex items-center">
+                                <MapPin className="h-4 w-4 mr-1" />
+                                {job.location}
+                              </div>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-1" />
+                                {job.type}
+                              </div>
+                              <div className="flex items-center">
+                                <DollarSign className="h-4 w-4 mr-1" />
+                                {job.salary}
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap gap-2 mt-3">
+                              <Badge variant="secondary">{job.experience}</Badge>
+                              {job.skills.slice(0, 3).map((skill, skillIndex) => (
+                                <Badge key={skillIndex} variant="outline">
+                                  {skill}
+                                </Badge>
+                              ))}
+                              {job.skills.length > 3 && (
+                                <Badge variant="outline">
+                                  +{job.skills.length - 3} more
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                              <Bookmark className="h-4 w-4" />
+                            </Button>
+                            <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
+                              <Share2 className="h-4 w-4" />
+                            </Button>
                           </div>
                         </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                            <Bookmark className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                            <Share2 className="h-4 w-4" />
-                          </Button>
+
+                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                          {job.description}
+                        </p>
+
+                        <div className="text-xs text-muted-foreground">
+                          {t.posted} {job.posted}
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-3">
-                        <div className="flex items-center">
-                          <MapPin className="h-4 w-4 mr-1" />
-                          {job.location}
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-1" />
-                          {job.type}
-                        </div>
-                        <div className="flex items-center">
-                          <DollarSign className="h-4 w-4 mr-1" />
-                          {job.salary}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <Badge variant="secondary">{job.experience}</Badge>
-                        {job.skills.slice(0, 3).map((skill, skillIndex) => (
-                          <Badge key={skillIndex} variant="outline">
-                            {skill}
-                          </Badge>
-                        ))}
-                        {job.skills.length > 3 && (
-                          <Badge variant="outline">
-                            +{job.skills.length - 3} more
-                          </Badge>
-                        )}
-                      </div>
-
-                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-                        {job.description}
-                      </p>
-
-                      <div className="text-xs text-muted-foreground">
-                        {t.posted} {job.posted}
+                      <div className="flex flex-col gap-2 lg:w-auto w-full">
+                        <Button className="w-full lg:w-auto">
+                          {t.apply}
+                        </Button>
                       </div>
                     </div>
-
-                    <div className="flex flex-col gap-2 lg:w-auto w-full">
-                      <Button className="w-full lg:w-auto">
-                        {t.apply}
-                      </Button>
-                    </div>
-                  </div>
+                  </Link>
                 </CardContent>
               </Card>
             </motion.div>
